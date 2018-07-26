@@ -23,7 +23,7 @@ cmd:option('-num_tests', 10)
 local opt = cmd:parse(arg)
 local model = loadcaffe.load(opt.input_prototxt, opt.input_caffemodel, 'nn')
 model:remove() -- Remove the softmax at the end
-assert(torch.isTypeOf(model:get(#model), nn.Linear))
+--assert(torch.isTypeOf(model:get(#model), nn.Linear))
 model:evaluate()
 model:float()
 
@@ -46,4 +46,3 @@ torch.save(opt.output_t7, {
   model=model,
   tests=tests,
 })
-

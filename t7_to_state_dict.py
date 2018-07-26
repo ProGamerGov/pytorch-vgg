@@ -4,6 +4,8 @@ import torch
 import torchvision.models as models
 from torch.utils.serialization import load_lua
 
+from CaffeLoader import modelSelector
+
 """
 Read a .t7 file written by caffemodel_to_t7.lua and convert it to a PyTorch .pth
 file containing a state dict for a VGG model.
@@ -17,10 +19,14 @@ args = parser.parse_args()
 
 t7_model = load_lua(args.input_t7)['model']
 
-pytorch_model = getattr(models, args.model_name)()
+pytorch_model, layerList = modelSelector(str(args.model_name).lower(), 'max')
+
 feature_modules = list(pytorch_model.features.modules())
-classifier_modules = list(pytorch_model.classifier.modules())
-pytorch_modules = feature_modules + classifier_modules
+if 'nin' not in str(args.model_name).lower(): 
+  classifier_modules = list(pytorch_model.classifier.modules())
+  pytorch_modules = feature_modules + classifier_modules
+else: 
+  pytorch_modules = feature_modules 
 
 next_pytorch_idx = 0
 for i, t7_module in enumerate(t7_model.modules):
@@ -49,4 +55,3 @@ os.remove('_hash')
 
 final_path = '%s-%s.pth' % (args.model_name, _hash[:8])
 os.rename(initial_path, final_path)
-
