@@ -1,5 +1,13 @@
 # pytorch-vgg
 
+**Requirments:**
+
+* torch==0.4.1
+* torchvision==0.2.1
+
+
+
+
 Some scripts to convert the [VGG-16](https://gist.github.com/ksimonyan/211839e770f7b538e2d8)
 and [VGG-19](https://gist.github.com/ksimonyan/3785162f95cd2d5fee77#file-readme-md) models [1] from Caffe to PyTorch.
 
